@@ -29,6 +29,10 @@ public class Material {
     @Enumerated(EnumType.STRING)
     private MaterialStatus estado;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    private Room room;
+
     @Column(name = "fecha_alta", updatable = false)
     private LocalDateTime fechaAlta;
 
