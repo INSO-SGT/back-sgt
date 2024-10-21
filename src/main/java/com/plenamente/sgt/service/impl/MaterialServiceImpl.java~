@@ -21,7 +21,6 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public Material registerMaterial(RegisterMaterial dto) {
         Material material = new Material();
-        material.setIdMaterial(dto.idMaterial());
         material.setNombre(dto.nombre());
         material.setDescripcion(dto.descripcion());
         material.setStock(dto.stock());
