@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+
 @RestController
 @RequestMapping("/api/v1/intervention-areas")
 @CrossOrigin("")
