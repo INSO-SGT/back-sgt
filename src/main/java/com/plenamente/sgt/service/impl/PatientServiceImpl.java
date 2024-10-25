@@ -110,7 +110,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<ListPatient> filterPatientsByPlan(Long planId) {
-        return patientRepository.findByIdPlan_Id(planId)
+        return patientRepository.findByIdPlanIdPlan(planId)
                 .stream().map(this::mapToListPatient).collect(Collectors.toList());
     }
 
