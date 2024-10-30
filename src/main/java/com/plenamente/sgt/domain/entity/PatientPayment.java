@@ -22,7 +22,7 @@ public class PatientPayment {
     private Double amount;
     private LocalDateTime date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "patient_id")
     private Patient idPatient;
 }

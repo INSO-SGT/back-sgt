@@ -28,11 +28,11 @@ public class Patient {
     // Prueba para lo de la foto
     private String photoUrl;  // URL o ruta de la foto del paciente
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "plan_id")
     private Plan idPlan;
 
     @OneToMany
-    @JoinColumn(name = "tutor_id")
+    @JoinColumn(name = "patient_id")
     private List<Tutor> tutors;
 }

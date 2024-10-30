@@ -44,13 +44,6 @@ public class PatientServiceImpl implements PatientService {
         patient.setIdPlan(registerPatient.idPlan());
         patient.setTutors(registerPatient.tutors());
 
-        // Manejo de la foto
-        MultipartFile photoFile = registerPatient.photo();
-        if (photoFile != null && !photoFile.isEmpty()) {
-            String photoUrl = savePhoto(photoFile); // POR IMPLEMENTAR
-            patient.setPhotoUrl(photoUrl);
-        }
-
         return patientRepository.save(patient);
     }
 
@@ -92,13 +85,6 @@ public class PatientServiceImpl implements PatientService {
         existingPatient.setIdPlan(updatePatient.idPlan());
         existingPatient.setTutors(updatePatient.tutors());
 
-        // Manejo de la foto si se proporciona una nueva
-        MultipartFile photoFile = updatePatient.photo();
-        if (photoFile != null && !photoFile.isEmpty()) {
-            String photoUrl = savePhoto(photoFile); // POR IMPLEMENTAR
-            existingPatient.setPhotoUrl(photoUrl);
-        }
-
         return patientRepository.save(existingPatient);
     }
 
@@ -132,7 +118,6 @@ public class PatientServiceImpl implements PatientService {
                 patient.getPaternalSurname(),
                 patient.getMaternalSurname(),
                 patient.getAge(),
-                patient.getIdPlan().getName(), // Le agregue un nombre a plan para diferenciar, luego lo cambias si gustas
                 patient.getTutors().stream().map(Tutor::getFullName).collect(Collectors.toList()),
                 patient.isStatus(),
                 patient.getPhotoUrl() // POR IMPLEMENTAR

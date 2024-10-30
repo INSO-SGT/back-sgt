@@ -18,10 +18,7 @@ public record RegisterPatient(
         @Length(max = 255) String allergies,
         boolean status,
         @NotNull Plan idPlan,
-        @NotEmpty @Size(min = 1, max = 2) List<Tutor> tutors,
-
-        // Prueba para lo de la foto
-        MultipartFile photo  // Archivo de foto
+        @NotEmpty @Size(min = 1, max = 2) List<Tutor> tutors
 ) {
     public RegisterPatient(
             @NotBlank @Length(min = 2, max = 30) String name,
@@ -35,6 +32,6 @@ public record RegisterPatient(
             MultipartFile photo  // Archivo de foto
     )
     {
-        this(name, paternalSurname, maternalSurname, birthdate, age, allergies, true, idPlan, tutors, photo);
+        this(name, paternalSurname, maternalSurname, birthdate, age, allergies, true, idPlan, tutors);
     }
 }

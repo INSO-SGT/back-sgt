@@ -8,7 +8,6 @@ public record ListPatient(
         String paternalSurname,
         String maternalSurname,
         int age,
-        String planName,  // Simplificación para mostrar el nombre del plan
         List<String> tutorNames,  // Lista de nombres de tutores
         boolean status,
         String photoUrl  // URL de la foto del paciente
