@@ -36,9 +36,6 @@ public class Material {
     @Column(name = "fecha_alta", updatable = false)
     private LocalDateTime fechaAlta;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
-    private Room room;
 
     @PrePersist
     public void prePersist() {
