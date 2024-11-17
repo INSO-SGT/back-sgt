@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name = "Plans")
+@Entity(name = "Plan")
 @Table(name = "plans")
 @Getter
 @Setter
@@ -14,6 +14,6 @@ public class Plan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPlan;
-    private int numOfSessions;
-    private double cost;
+    private Integer numOfSessions;
+    private Double cost;
 }
