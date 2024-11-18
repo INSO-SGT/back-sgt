@@ -9,14 +9,15 @@ import com.plenamente.sgt.domain.entity.Tutor;
 import com.plenamente.sgt.infra.repository.PatientRepository;
 import com.plenamente.sgt.infra.exception.ResourceNotFoundException;
 import com.plenamente.sgt.service.PatientService;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@NoArgsConstructor
 public class PatientServiceImpl implements PatientService {
 
     @Autowired
@@ -118,14 +119,9 @@ public class PatientServiceImpl implements PatientService {
                 patient.getPaternalSurname(),
                 patient.getMaternalSurname(),
                 patient.getAge(),
+                patient.getIdPlan().getIdPlan(),
                 patient.getTutors().stream().map(Tutor::getFullName).collect(Collectors.toList()),
-                patient.isStatus(),
-                patient.getPhotoUrl() // POR IMPLEMENTAR
+                patient.isStatus()
         );
-    }
-
-    private String savePhoto(MultipartFile photoFile) {
-        // POR IMPLEMENTAR
-        return "url_de_la_foto";
     }
 }

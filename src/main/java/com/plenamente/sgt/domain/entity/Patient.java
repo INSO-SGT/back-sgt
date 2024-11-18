@@ -25,9 +25,6 @@ public class Patient {
     private String allergies;
     private boolean status = true;
 
-    // Prueba para lo de la foto
-    private String photoUrl;  // URL o ruta de la foto del paciente
-
     @ManyToOne()
     @JoinColumn(name = "plan_id")
     private Plan idPlan;

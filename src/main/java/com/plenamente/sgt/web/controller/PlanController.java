@@ -17,11 +17,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PlanController {
     private final PlanService planService;
-
-    @PostMapping("register")
-    @Transactional
-    public ResponseEntity<Plan> register(@RequestBody PlanDto planDto) {
-        Plan plan = planService.addPlan(planDto);
-        return new ResponseEntity<>(plan, HttpStatus.CREATED);
-    }
 }

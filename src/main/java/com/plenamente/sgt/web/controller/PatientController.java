@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PatientController {
 
-    private PatientService patientService;
+    private final PatientService patientService;
 
     // Endpoint para registrar un paciente
     @PostMapping("/register")
