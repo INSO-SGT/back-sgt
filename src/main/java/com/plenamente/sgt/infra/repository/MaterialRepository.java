@@ -13,4 +13,5 @@ public interface MaterialRepository extends JpaRepository<Material, String> {
     Optional<Material> findTopByOrderByIdMaterialDesc();
     List<Material> findByRoomIsNull();
     List<Material> findByRoom(Room room);
+    Optional<Material> findById(String id);
 }

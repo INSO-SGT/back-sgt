@@ -19,4 +19,6 @@ public interface MaterialService {
 
     List<Material> getUnassignedMaterials();
 
+    List<Material> getMaterialsByRoom(Long roomId);
+
 }

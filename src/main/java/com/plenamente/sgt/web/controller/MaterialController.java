@@ -44,18 +44,16 @@ public class MaterialController {
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
-    @PostMapping("/{materialId}/assign/{roomId}")
-    public ResponseEntity<Material> assignMaterialToRoom(
-            @PathVariable String materialId,
-            @PathVariable Long roomId) {
-        Material assignedMaterial = materialService.assignMaterialToRoom(materialId, roomId);
-        return new ResponseEntity<>(assignedMaterial, HttpStatus.OK);
+    @PostMapping("/assign")
+    public ResponseEntity<Material> assignMaterialToRoom(@RequestParam String materialId, @RequestParam Long roomId) {
+        Material material = materialService.assignMaterialToRoom(materialId, roomId);
+        return ResponseEntity.ok(material);
     }
 
-    @PostMapping("/{materialId}/unassign")
-    public ResponseEntity<Material> unassignMaterialFromRoom(@PathVariable String materialId) {
-        Material unassignedMaterial = materialService.unassignMaterialFromRoom(materialId);
-        return new ResponseEntity<>(unassignedMaterial, HttpStatus.OK);
+    @DeleteMapping("/unassign")
+    public ResponseEntity<Material> unassignMaterialFromRoom(@RequestParam String materialId) {
+        Material material = materialService.unassignMaterialFromRoom(materialId);
+        return ResponseEntity.ok(material);
     }
 
     @GetMapping("/unassigned")
@@ -63,4 +61,11 @@ public class MaterialController {
         List<Material> unassignedMaterials = materialService.getUnassignedMaterials();
         return new ResponseEntity<>(unassignedMaterials, HttpStatus.OK);
     }
+
+    @GetMapping("/by-room")
+    public ResponseEntity<List<Material>> getMaterialsByRoom(@RequestParam Long roomId) {
+        List<Material> materials = materialService.getMaterialsByRoom(roomId);
+        return ResponseEntity.ok(materials);
+    }
+
 }
