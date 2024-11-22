@@ -64,7 +64,9 @@ public class MaterialServiceImpl implements MaterialService {
         return materialRepository.save(existingMaterial);
     }
 
-    @Override
+    public void deleteMaterial(String materialId){
+        materialRepository.deleteById(materialId);
+    }
     public String generateNextMaterialId() {
         // Obtener el último ID insertado
         Optional<Material> lastMaterialOpt = materialRepository.findTopByOrderByIdMaterialDesc();

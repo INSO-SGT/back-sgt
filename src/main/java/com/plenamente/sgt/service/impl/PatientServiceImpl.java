@@ -8,8 +8,11 @@ import com.plenamente.sgt.domain.entity.Plan;
 import com.plenamente.sgt.domain.entity.Tutor;
 import com.plenamente.sgt.infra.repository.PatientRepository;
 import com.plenamente.sgt.infra.exception.ResourceNotFoundException;
+import com.plenamente.sgt.infra.repository.PlanRepository;
 import com.plenamente.sgt.service.PatientService;
+import jakarta.persistence.ManyToOne;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +20,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class PatientServiceImpl implements PatientService {
 
-    @Autowired
-    private PatientRepository patientRepository;
+    private final PatientRepository patientRepository;
+    private final PlanRepository planRepository;
 
     @Override
     public Patient createPatient(RegisterPatient registerPatient) {
@@ -31,8 +34,11 @@ public class PatientServiceImpl implements PatientService {
         }
 
         // Validación de los días según el plan
-        Plan plan = registerPatient.idPlan(); // Asumiendo que Plan tiene un metodo para obtener días
+        //Plan plan = registerPatient.idPlan(); // Asumiendo que Plan tiene un metodo para obtener días
         // Aqui puedes poner la validacion que gustes cuando hagas el dto de plan y todo eso ps xd
+
+        Plan plan = planRepository.findById(registerPatient.idPlan())
+                .orElseThrow(() -> new ResourceNotFoundException("Plan no encontrado."));
 
         // Crear paciente
         Patient patient = new Patient();
@@ -42,7 +48,7 @@ public class PatientServiceImpl implements PatientService {
         patient.setBirthdate(registerPatient.birthdate());
         patient.setAge(registerPatient.age());
         patient.setAllergies(registerPatient.allergies());
-        patient.setIdPlan(registerPatient.idPlan());
+        patient.setIdPlan(plan);
         patient.setTutors(registerPatient.tutors());
 
         return patientRepository.save(patient);

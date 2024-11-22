@@ -63,4 +63,9 @@ public class MaterialController {
         List<Material> unassignedMaterials = materialService.getUnassignedMaterials();
         return new ResponseEntity<>(unassignedMaterials, HttpStatus.OK);
     }
+    @DeleteMapping("/{materialId}")
+    public ResponseEntity<Void> deleteMaterial(@PathVariable String materialId) {
+        materialService.deleteMaterial(materialId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

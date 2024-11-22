@@ -9,6 +9,6 @@ public record ListPatient(
         String maternalSurname,
         int age,
         Long planId,
-        List<String> tutorNames,  // Lista de nombres de tutores
+        List<String> tutorNames,
         boolean status
 ) {}
