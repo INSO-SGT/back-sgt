@@ -16,9 +16,6 @@ public interface MaterialService {
     Material assignMaterialToRoom(String materialId, Long roomId);
 
     Material unassignMaterialFromRoom(String materialId);
-
     List<Material> getUnassignedMaterials();
-
-    List<Material> getMaterialsByRoom(Long roomId);
 
 }

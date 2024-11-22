@@ -38,6 +38,10 @@ public class MaterialServiceImpl implements MaterialService {
         return materialRepository.save(material);  // Guardar el material en la base de datos
     }
 
+    public void deleteMaterial(String materialId){
+        materialRepository.deleteById(materialId);
+    }
+
     @Override
     public List<Material> getAllMaterials() {
         return materialRepository.findAll();
@@ -107,7 +111,7 @@ public class MaterialServiceImpl implements MaterialService {
                 .orElseThrow(() -> new EntityNotFoundException("Material no encontrado con id: " + materialId));
 
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new EntityNotFoundException("Ambiente no encontrado con id: " + roomId));
+                .orElseThrow(() -> new EntityNotFoundException("Room no encontrado con id: " + roomId));
 
         material.setRoom(room);
         return materialRepository.save(material);
@@ -118,21 +122,13 @@ public class MaterialServiceImpl implements MaterialService {
         Material material = materialRepository.findById(materialId)
                 .orElseThrow(() -> new EntityNotFoundException("Material no encontrado con id: " + materialId));
 
-        material.setRoom(null);
+        material.setRoom(null);  // Desasignamos el material de cualquier sala
         return materialRepository.save(material);
     }
 
     @Override
     public List<Material> getUnassignedMaterials() {
         return materialRepository.findByRoomIsNull();
-    }
-
-    @Override
-    public List<Material> getMaterialsByRoom(Long roomId) {
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new EntityNotFoundException("Ambiente no encontrado con id: " + roomId));
-
-        return materialRepository.findByRoom(room);
     }
 
 
