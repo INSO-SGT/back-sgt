@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface MaterialService {
     Material registerMaterial(RegisterMaterial dto);
-    List<Material> getAllMaterials();
+    List<RegisterMaterial> getAllMaterials();
     Material getMaterialById(String id);
     Material updateMaterial(String id, RegisterMaterial updatedMaterial);
     String generateNextMaterialId();
     String incrementAlphaPart(String alphaPart);
     Material assignMaterialToRoom(String materialId, Long roomId);
     Material unassignMaterialFromRoom(String materialId);
-    List<Material> getUnassignedMaterials();
+    List<RegisterMaterial> getUnassignedMaterials();
     void deleteMaterial(String materialId);
 }

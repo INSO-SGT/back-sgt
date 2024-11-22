@@ -29,7 +29,7 @@ public class Material {
     @Enumerated(EnumType.STRING)
     private MaterialStatus estado;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
 

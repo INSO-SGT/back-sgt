@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record RegisterMaterial(
+        @NotNull String idMaterial,
         @NotNull @Size(min = 1, max = 100) String nombre,
         String descripcion,
         @Min(0) int stock,

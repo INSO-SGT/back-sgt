@@ -25,8 +25,8 @@ public class MaterialController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Material>> getAllMaterials() {
-        List<Material> materials = materialService.getAllMaterials();
+    public ResponseEntity<List<RegisterMaterial>> getAllMaterials() {
+        List<RegisterMaterial> materials = materialService.getAllMaterials();
         return new ResponseEntity<>(materials, HttpStatus.OK);
     }
 
@@ -59,8 +59,8 @@ public class MaterialController {
     }
 
     @GetMapping("/unassigned")
-    public ResponseEntity<List<Material>> getUnassignedMaterials() {
-        List<Material> unassignedMaterials = materialService.getUnassignedMaterials();
+    public ResponseEntity<List<RegisterMaterial>> getUnassignedMaterials() {
+        List<RegisterMaterial> unassignedMaterials = materialService.getUnassignedMaterials();
         return new ResponseEntity<>(unassignedMaterials, HttpStatus.OK);
     }
     @DeleteMapping("/{materialId}")
