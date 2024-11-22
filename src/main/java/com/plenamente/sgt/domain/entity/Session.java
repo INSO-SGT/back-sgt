@@ -1,13 +1,12 @@
 package com.plenamente.sgt.domain.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "sessions")
@@ -16,8 +15,31 @@ import java.time.Duration;
 @NoArgsConstructor
 public class Session {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idSession;
-    private Duration duration; // Aqui use duration en vez de Time, pq Time es para una hora especifica del dia, y Duration es para un intervalo de tiempo.
 
+    private LocalDate sessionDate;  // Fecha de la sesión
+    private LocalTime startTime;    // Hora de inicio
+    private LocalTime endTime;      // Hora de fin
+    private String reason;          // Motivo (opcional, útil para reprogramaciones)
+    private boolean rescheduled = false;  // Indica si la sesión fue reprogramada
 
+    @ManyToOne
+    @JoinColumn(name = "patient_id", nullable = false)
+    private Patient patient;
+
+    @ManyToOne
+    @JoinColumn(name = "therapist_id", nullable = false)
+    private Therapist therapist;
+
+    @ManyToOne
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
+
+    @ManyToOne
+    @JoinColumn(name = "plan_id", nullable = false)
+    private Plan plan;
 }
+
+
+

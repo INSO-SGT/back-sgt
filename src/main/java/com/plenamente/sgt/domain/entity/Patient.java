@@ -23,6 +23,9 @@ public class Patient {
     private LocalDate birthdate;
     private int age;
     private String allergies;
+
+
+
     private boolean status = true;
 
     @ManyToOne()
