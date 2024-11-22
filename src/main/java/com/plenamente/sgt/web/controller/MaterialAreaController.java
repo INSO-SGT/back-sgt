@@ -1,11 +1,14 @@
 package com.plenamente.sgt.web.controller;
 
+import com.plenamente.sgt.domain.entity.Material;
 import com.plenamente.sgt.domain.entity.MaterialArea;
 import com.plenamente.sgt.service.MaterialAreaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/material-areas")
@@ -25,5 +28,23 @@ public class MaterialAreaController {
     public ResponseEntity<MaterialArea> updateMaterialArea(@PathVariable Long id) {
         MaterialArea updatedMaterialArea = materialAreaService.updateMaterialArea(id);
         return ResponseEntity.ok(updatedMaterialArea);
+    }
+
+    @PostMapping("/assign")
+    public ResponseEntity<MaterialArea> assignMaterialToRoom(@RequestParam String materialId, @RequestParam Long AreaMaterialId) {
+        MaterialArea materialArea = materialAreaService.assignMaterialToAreaMaterial(materialId, AreaMaterialId);
+        return ResponseEntity.ok(materialArea);
+    }
+
+    @GetMapping("/by-room")
+    public ResponseEntity<List<MaterialArea>> getMaterialsByRoom(@RequestParam String materialId) {
+        List<MaterialArea> materials = materialAreaService.getMaterialsByAreaMaterial(materialId);
+        return ResponseEntity.ok(materials);
+    }
+
+    @DeleteMapping("/unassign")
+    public ResponseEntity<MaterialArea> unassignMaterialFromRoom(@RequestParam Long AreaMaterialId) {
+        MaterialArea materialArea = materialAreaService.unassignMaterialFromAreaMaterial(AreaMaterialId);
+        return ResponseEntity.ok(materialArea);
     }
 }
