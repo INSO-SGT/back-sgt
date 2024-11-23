@@ -74,4 +74,17 @@ public class RoomServiceImpl implements RoomService {
         // Guardar los cambios en la base de datos
         return roomRepository.save(existingRoom);
     }
+
+    @Override
+    public String deleteRoom(Long roomId) {
+        Room existingRoom = roomRepository.findById(roomId)
+                .orElseThrow(() -> new EntityNotFoundException("Room no encontrado con id: " + roomId));
+        List<Material> materials = materialRepository.findByRoom(existingRoom);
+        for (Material material : materials) {
+            material.setRoom(null);  // Desasignar material
+            materialRepository.save(material);  // Guardar el cambio
+        }
+        roomRepository.deleteById(roomId);
+        return "La sala con ID " + roomId + " y nombre '" + existingRoom.getName() + "' fue eliminada exitosamente.";
+    }
 }

@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface InterventionAreaRepository extends JpaRepository<InterventionArea, Long> {
     Optional<InterventionArea> findByName(String name);
+    @Override
+    Optional<InterventionArea> findById(Long id);
 }

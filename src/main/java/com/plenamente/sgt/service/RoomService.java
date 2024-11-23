@@ -1,6 +1,5 @@
 package com.plenamente.sgt.service;
 
-import com.plenamente.sgt.domain.dto.MaterialDto.RegisterMaterial;
 import com.plenamente.sgt.domain.entity.Material;
 import com.plenamente.sgt.domain.entity.Room;
 
@@ -13,4 +12,5 @@ public interface RoomService {
     List<Material> getMaterialsByRoom(Long roomId);
     Room getRoomById(Long roomId);
     Room updateRoom(Long roomId, Room roomUpdated);
+    String deleteRoom(Long roomId);
 }
