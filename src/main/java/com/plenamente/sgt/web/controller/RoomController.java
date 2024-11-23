@@ -49,4 +49,10 @@ public class RoomController {
         Room room = roomService.getRoomById(roomId);
         return ResponseEntity.ok(room);
     }
+
+    @PutMapping("/update/{roomId}")
+    public ResponseEntity<Room> updateRoom(@PathVariable Long roomId, @RequestBody Room roomUpdated) {
+        Room room = roomService.updateRoom(roomId,roomUpdated);
+        return ResponseEntity.ok(room);
+    }
 }
