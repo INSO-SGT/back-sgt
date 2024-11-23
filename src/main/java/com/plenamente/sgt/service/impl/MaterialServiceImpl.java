@@ -5,6 +5,7 @@ import com.plenamente.sgt.domain.entity.Material;
 import com.plenamente.sgt.domain.entity.Room;
 import com.plenamente.sgt.infra.repository.MaterialRepository;
 import com.plenamente.sgt.infra.repository.RoomRepository;
+import com.plenamente.sgt.mapper.MaterialMapper;
 import com.plenamente.sgt.service.MaterialService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class MaterialServiceImpl implements MaterialService {
 
     private final MaterialRepository materialRepository;
     private final RoomRepository roomRepository;
+    private final MaterialMapper materialMapper;
 
     @Override
     public Material registerMaterial(RegisterMaterial dto) {
@@ -39,8 +41,11 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public List<Material> getAllMaterials() {
-        return materialRepository.findAll();
+    public List<RegisterMaterial> getAllMaterials() {
+        List<Material> materials = materialRepository.findAll();
+        return materials.stream()
+                .map(materialMapper::toDTO)
+                .toList();
     }
 
     @Override
@@ -125,8 +130,12 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public List<Material> getUnassignedMaterials() {
-        return materialRepository.findByRoomIsNull();
+    public List<RegisterMaterial> getUnassignedMaterials() {
+        List<Material> materials = materialRepository.findByRoomIsNull();
+        return materials.stream()
+                .map(materialMapper::toDTO)
+                .toList();
     }
+
 
 }

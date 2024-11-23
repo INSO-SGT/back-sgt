@@ -1,5 +1,7 @@
 package com.plenamente.sgt.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +22,7 @@ public class InterventionArea {
     private String name;
     private String description;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "interventionArea", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<MaterialArea> materialAreas;
 }
