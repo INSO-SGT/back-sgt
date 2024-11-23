@@ -1,9 +1,11 @@
 package com.plenamente.sgt.service.impl;
 
 import com.plenamente.sgt.domain.dto.SessionDto.ListSession;
+import com.plenamente.sgt.domain.dto.SessionDto.MarkPresenceSession;
 import com.plenamente.sgt.domain.dto.SessionDto.RegisterSession;
 import com.plenamente.sgt.domain.dto.SessionDto.UpdateSession;
 import com.plenamente.sgt.domain.entity.*;
+import com.plenamente.sgt.infra.exception.ResourceNotFoundException;
 import com.plenamente.sgt.infra.repository.*;
 import com.plenamente.sgt.service.SessionService;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,8 +29,11 @@ public class SessionServiceImpl implements SessionService {
     public Session createSession(RegisterSession dto) {
         Patient patient = patientRepository.findById(dto.patientId())
                 .orElseThrow(() -> new EntityNotFoundException("Paciente no encontrado"));
-        Therapist therapist = (Therapist) userRepository.findById(dto.therapistId())
-                .orElseThrow(() -> new EntityNotFoundException("Terapeuta no encontrado"));
+        User user = userRepository.findById(dto.therapistId())
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+        if (!(user instanceof Therapist therapist)) {
+            throw new IllegalArgumentException("El usuario no es un terapeuta");
+        }
         Room room = roomRepository.findById(dto.roomId())
                 .orElseThrow(() -> new EntityNotFoundException("Sala no encontrada"));
         Plan plan = planRepository.findById(dto.planId())
@@ -49,7 +54,8 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public List<ListSession> getSessionsByTherapist(Long therapistId) {
         // Verificar que el terapeuta existe
-        Therapist therapist = (Therapist) userRepository.findById(therapistId)
+        userRepository.findById(therapistId)
+                .filter(user -> user instanceof Therapist)
                 .orElseThrow(() -> new EntityNotFoundException("Terapeuta no encontrado"));
 
         // Consultar las sesiones asignadas al terapeuta
@@ -63,7 +69,9 @@ public class SessionServiceImpl implements SessionService {
                         session.getPatient().getName(),
                         session.getTherapist().getName(),
                         session.getRoom().getName(),
-                        session.isRescheduled()
+                        session.isRescheduled(),
+                        session.isTherapistPresent(),
+                        session.isPatientPresent()
                 ))
                 .collect(Collectors.toList());
     }
@@ -71,8 +79,13 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public List<ListSession> getSessionsByDate(LocalDate date) {
-        return sessionRepository.findBySessionDate(date)
-                .stream()
+        List<Session> sessions = sessionRepository.findBySessionDate(date);
+
+        if (sessions.isEmpty()) {
+            throw new ResourceNotFoundException("No se encontraron sesiones para la fecha " + date);
+        }
+
+        return sessions.stream()
                 .map(session -> new ListSession(
                         session.getIdSession(),
                         session.getSessionDate(),
@@ -81,14 +94,17 @@ public class SessionServiceImpl implements SessionService {
                         session.getPatient().getName(),
                         session.getTherapist().getName(),
                         session.getRoom().getName(),
-                        session.isRescheduled()
+                        session.isRescheduled(),
+                        session.isTherapistPresent(),
+                        session.isPatientPresent()
                 ))
                 .collect(Collectors.toList());
     }
 
     @Override
     public Session updateSession(UpdateSession dto) {
-        Session session = sessionRepository.findById(dto.idSession())
+        // Usamos el idSession que se pasa en la URL (ya que se ha asignado al DTO en el controlador)
+        Session session = sessionRepository.findByIdSession(dto.idSession())
                 .orElseThrow(() -> new EntityNotFoundException("Sesión no encontrada"));
 
         session.setSessionDate(dto.sessionDate());
@@ -99,4 +115,19 @@ public class SessionServiceImpl implements SessionService {
 
         return sessionRepository.save(session);
     }
+
+    @Override
+    public Session markPresence(MarkPresenceSession dto) {
+        // Obtener la sesión por el ID
+        Session session = sessionRepository.findByIdSession(dto.sessionId())
+                .orElseThrow(() -> new EntityNotFoundException("Sesión no encontrada"));
+
+        // Marcar la presencia del terapeuta y paciente
+        session.setTherapistPresent(dto.therapistPresent());
+        session.setPatientPresent(dto.patientPresent());
+
+        // Guardar la sesión actualizada
+        return sessionRepository.save(session);
+    }
+
 }

@@ -28,8 +28,7 @@ public record RegisterPatient(
             @Min(0) @Max(18) int age,
             @Length(max = 255) String allergies,
             @NotNull Long idPlan,
-            @NotEmpty @Size(min = 1, max = 2) List<Tutor> tutors,
-            MultipartFile photo  // Archivo de foto
+            @NotEmpty @Size(min = 1, max = 2) List<Tutor> tutors
     )
     {
         this(name, paternalSurname, maternalSurname, birthdate, age, allergies, true, idPlan, tutors);

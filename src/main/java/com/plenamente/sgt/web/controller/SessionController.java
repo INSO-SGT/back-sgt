@@ -1,6 +1,7 @@
 package com.plenamente.sgt.web.controller;
 
 import com.plenamente.sgt.domain.dto.SessionDto.ListSession;
+import com.plenamente.sgt.domain.dto.SessionDto.MarkPresenceSession;
 import com.plenamente.sgt.domain.dto.SessionDto.RegisterSession;
 import com.plenamente.sgt.domain.dto.SessionDto.UpdateSession;
 import com.plenamente.sgt.domain.entity.Session;
@@ -18,18 +19,41 @@ import java.util.List;
 public class SessionController {
     private final SessionService sessionService;
 
-    @PostMapping("/register")
+    @PostMapping("/register" )
     public ResponseEntity<Session> registerSession(@RequestBody RegisterSession dto) {
         return ResponseEntity.ok(sessionService.createSession(dto));
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Session> updateSession(@RequestBody UpdateSession dto) {
-        return ResponseEntity.ok(sessionService.updateSession(dto));
+    @GetMapping("/therapist/{id}")
+    public ResponseEntity<List<ListSession>> getSessionsByTherapist(@PathVariable("id") Long therapistId) {
+        List<ListSession> sessions = sessionService.getSessionsByTherapist(therapistId);
+        return ResponseEntity.ok(sessions);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Session> updateSession(@PathVariable("id") Long idSession,
+                                                 @RequestBody UpdateSession dto) {
+        UpdateSession updatedDto = new UpdateSession(
+                idSession,
+                dto.sessionDate(),
+                dto.startTime(),
+                dto.endTime(),
+                dto.reason()
+        );
+
+        return ResponseEntity.ok(sessionService.updateSession(updatedDto));
     }
 
     @GetMapping("/date")
     public ResponseEntity<List<ListSession>> getSessionsByDate(@RequestParam LocalDate date) {
         return ResponseEntity.ok(sessionService.getSessionsByDate(date));
+    }
+
+    @PutMapping("/presence/{id}")
+    public ResponseEntity<Session> markPresence(@PathVariable("id") Long sessionId,
+                                                @RequestBody MarkPresenceSession dto) {
+        dto = new MarkPresenceSession(sessionId, dto.therapistPresent(), dto.patientPresent());
+        Session updatedSession = sessionService.markPresence(dto);
+        return ResponseEntity.ok(updatedSession);
     }
 }

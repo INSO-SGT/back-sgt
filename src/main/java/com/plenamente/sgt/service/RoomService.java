@@ -11,4 +11,6 @@ public interface RoomService {
     List<Room> listRoomsByIsTherapeutic(boolean isTherapeutic);
     List<Material> getMaterialsByRoom(Long roomId);
     Room getRoomById(Long roomId);
+    Room updateRoom(Long roomId, Room roomUpdated);
+    String deleteRoom(Long roomId);
 }

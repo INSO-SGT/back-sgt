@@ -1,6 +1,7 @@
 package com.plenamente.sgt.service;
 
 import com.plenamente.sgt.domain.dto.SessionDto.ListSession;
+import com.plenamente.sgt.domain.dto.SessionDto.MarkPresenceSession;
 import com.plenamente.sgt.domain.dto.SessionDto.RegisterSession;
 import com.plenamente.sgt.domain.dto.SessionDto.UpdateSession;
 import com.plenamente.sgt.domain.entity.Session;
@@ -13,4 +14,5 @@ public interface SessionService {
     Session updateSession(UpdateSession dto);
     List<ListSession> getSessionsByDate(LocalDate date);
     List<ListSession> getSessionsByTherapist(Long therapistId);
+    Session markPresence(MarkPresenceSession dto);
 }

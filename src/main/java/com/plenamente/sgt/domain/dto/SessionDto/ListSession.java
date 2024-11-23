@@ -11,5 +11,7 @@ public record ListSession(
         String patientName,
         String therapistName,
         String roomName,
-        boolean rescheduled
+        boolean rescheduled,
+        boolean therapistPresent,
+        boolean patientPresent
 ) {}

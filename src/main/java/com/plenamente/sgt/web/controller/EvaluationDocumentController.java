@@ -1,6 +1,7 @@
 package com.plenamente.sgt.web.controller;
 
 import com.plenamente.sgt.domain.dto.EvaluationDocumentDto.RegisterEvaluationDocument;
+import com.plenamente.sgt.domain.dto.EvaluationDocumentDto.UpdateEvaluationDocument;
 import com.plenamente.sgt.domain.entity.EvaluationDocument;
 import com.plenamente.sgt.service.EvaluationDocumentService;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,11 @@ public class EvaluationDocumentController {
                 .filename(document.getName())
                 .build());
         return new ResponseEntity<>(document.getArchive(), headers, HttpStatus.OK);
+    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UpdateEvaluationDocument> updateEvaluationDocument(
+            @PathVariable Long id,UpdateEvaluationDocument evaluationDocumentUp) {
+        UpdateEvaluationDocument updatedEvaluationDocument = evaluationDocumentService.updateEvaluationDocument(id, evaluationDocumentUp);
+        return ResponseEntity.ok(updatedEvaluationDocument);
     }
 }

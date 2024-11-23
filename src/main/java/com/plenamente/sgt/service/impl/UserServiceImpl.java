@@ -79,16 +79,6 @@ public class UserServiceImpl implements UserService {
             if (paymentSession != null) {
                 ((Therapist) user).setPaymentSession(paymentSession);
             }
-        } else if (user instanceof Secretary) {
-            Double paymentMonthly = data.paymentMonthly();
-            if (paymentMonthly != null) {
-                ((Secretary) user).setPaymentMonthly(paymentMonthly);
-            }
-        } else if (user instanceof AdminTherapist) {
-            Double paymentSession = data.paymentSession();
-            if (paymentSession != null) {
-                ((AdminTherapist) user).setPaymentSession(paymentSession);
-            }
         }
 
         userRepository.save(user);
