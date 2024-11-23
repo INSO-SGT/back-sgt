@@ -1,5 +1,6 @@
 package com.plenamente.sgt.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class MaterialArea {
     private Long idMaterialArea;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "intervention_area_id")
+    @JsonBackReference
     private InterventionArea interventionArea;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "material_area_id")
