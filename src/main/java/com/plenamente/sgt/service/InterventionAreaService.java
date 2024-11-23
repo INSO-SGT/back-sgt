@@ -8,4 +8,6 @@ public interface InterventionAreaService {
     InterventionArea createAreaForIntervention(String name, String description);
 
     List<InterventionArea> getAllInterventionAreas();
+
+    InterventionArea deleteInterventionArea(Long id);
 }

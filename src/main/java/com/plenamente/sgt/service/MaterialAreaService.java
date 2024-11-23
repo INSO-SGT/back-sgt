@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MaterialAreaService {
     MaterialArea createAreaForMaterial(String interventionAreaName);
-    MaterialArea updateMaterialArea(Long id);
+    MaterialArea updateMaterialArea(Long id, Long interventionAreaId);
     MaterialArea assignMaterialToAreaMaterial(String materialId, Long AreaMaterialId);
     MaterialArea unassignMaterialFromAreaMaterial(Long AreaMaterialId);
     List<MaterialArea> getMaterialsByAreaMaterial(String materialId);

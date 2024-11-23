@@ -25,8 +25,8 @@ public class MaterialAreaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MaterialArea> updateMaterialArea(@PathVariable Long id) {
-        MaterialArea updatedMaterialArea = materialAreaService.updateMaterialArea(id);
+    public ResponseEntity<MaterialArea> updateMaterialArea(@PathVariable Long id,@RequestParam Long interventionAreaId) {
+        MaterialArea updatedMaterialArea = materialAreaService.updateMaterialArea(id,interventionAreaId);
         return ResponseEntity.ok(updatedMaterialArea);
     }
 

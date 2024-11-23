@@ -33,4 +33,10 @@ public class InterventionAreaController {
         return new ResponseEntity<>(areas, HttpStatus.OK);
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<InterventionArea> deleteInterventionArea(@PathVariable Long id) {
+        interventionAreaService.deleteInterventionArea(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

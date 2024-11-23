@@ -35,10 +35,14 @@ public class MaterialAreaServiceImpl implements MaterialAreaService {
     }
 
     @Override
-    public MaterialArea updateMaterialArea(Long id) {
+    public MaterialArea updateMaterialArea(Long id, Long interventionAreaId) {
         MaterialArea materialArea = materialAreaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Área de material no encontrada con id: " + id));
 
+        InterventionArea interventionArea = interventionAreaRepository.findById(interventionAreaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Área de intervención no encontrada con nombre: " + interventionAreaId));
+
+        materialArea.setInterventionArea(interventionArea);
         return materialAreaRepository.save(materialArea);
     }
 
