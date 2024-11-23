@@ -40,10 +40,6 @@ public class MaterialServiceImpl implements MaterialService {
         return materialRepository.save(material);  // Guardar el material en la base de datos
     }
 
-    public void deleteMaterial(String materialId){
-        materialRepository.deleteById(materialId);
-    }
-
     @Override
     public List<RegisterMaterial> getAllMaterials() {
         List<Material> materials = materialRepository.findAll();
