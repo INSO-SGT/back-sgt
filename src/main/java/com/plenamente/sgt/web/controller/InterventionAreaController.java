@@ -1,6 +1,7 @@
 package com.plenamente.sgt.web.controller;
 
 import com.plenamente.sgt.domain.dto.InterventionAreaDto.CreateAreaForIntervention;
+import com.plenamente.sgt.domain.dto.InterventionAreaDto.ListInterventionArea;
 import com.plenamente.sgt.domain.entity.InterventionArea;
 import com.plenamente.sgt.service.InterventionAreaService;
 import jakarta.validation.Valid;
@@ -28,8 +29,8 @@ public class InterventionAreaController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<InterventionArea>> getAllInterventionAreas() {
-        List<InterventionArea> areas = interventionAreaService.getAllInterventionAreas();
+    public ResponseEntity<List<ListInterventionArea>> getAllInterventionAreas() {
+        List<ListInterventionArea> areas = interventionAreaService.getAllInterventionAreas();
         return new ResponseEntity<>(areas, HttpStatus.OK);
     }
 
