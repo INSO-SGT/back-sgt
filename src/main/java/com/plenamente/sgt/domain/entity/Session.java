@@ -23,6 +23,8 @@ public class Session {
     private LocalTime endTime;      // Hora de fin
     private String reason;          // Motivo (opcional, útil para reprogramaciones)
     private boolean rescheduled = false;  // Indica si la sesión fue reprogramada
+    private boolean therapistPresent;
+    private boolean patientPresent;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)

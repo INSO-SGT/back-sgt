@@ -1,4 +1,0 @@
-package com.plenamente.sgt.service;
-
-public interface SessionService {
-}
