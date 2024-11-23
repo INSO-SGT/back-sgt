@@ -9,6 +9,7 @@ import com.plenamente.sgt.domain.entity.Tutor;
 import com.plenamente.sgt.infra.repository.PatientRepository;
 import com.plenamente.sgt.infra.exception.ResourceNotFoundException;
 import com.plenamente.sgt.infra.repository.PlanRepository;
+import com.plenamente.sgt.infra.repository.TutorRepository;
 import com.plenamente.sgt.service.PatientService;
 import jakarta.persistence.ManyToOne;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ public class PatientServiceImpl implements PatientService {
 
     private final PatientRepository patientRepository;
     private final PlanRepository planRepository;
+    private final TutorRepository tutorRepository;
 
     @Override
     public Patient createPatient(RegisterPatient registerPatient) {
@@ -42,6 +44,8 @@ public class PatientServiceImpl implements PatientService {
 
         // Crear paciente
         Patient patient = new Patient();
+
+
         patient.setName(registerPatient.name());
         patient.setPaternalSurname(registerPatient.paternalSurname());
         patient.setMaternalSurname(registerPatient.maternalSurname());
@@ -50,6 +54,18 @@ public class PatientServiceImpl implements PatientService {
         patient.setAllergies(registerPatient.allergies());
         patient.setIdPlan(plan);
         patient.setTutors(registerPatient.tutors());
+
+        if(registerPatient.tutors().size() == 1){
+            Tutor tutor = registerPatient.tutors().get(0);
+            tutorRepository.save(tutor);
+        }
+        if(registerPatient.tutors().size() == 2) {
+            Tutor tutor1 = registerPatient.tutors().get(0);
+            Tutor tutor2 = registerPatient.tutors().get(1);
+            tutorRepository.save(tutor1);
+            tutorRepository.save(tutor2);
+        }
+
 
         return patientRepository.save(patient);
     }
