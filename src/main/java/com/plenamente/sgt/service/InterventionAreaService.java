@@ -1,5 +1,6 @@
 package com.plenamente.sgt.service;
 
+import com.plenamente.sgt.domain.dto.InterventionAreaDto.CreateAreaForIntervention;
 import com.plenamente.sgt.domain.dto.InterventionAreaDto.ListInterventionArea;
 import com.plenamente.sgt.domain.entity.InterventionArea;
 
@@ -11,4 +12,6 @@ public interface InterventionAreaService {
     List<ListInterventionArea> getAllInterventionAreas();
 
     InterventionArea deleteInterventionArea(Long id);
+
+    InterventionArea updateInterventionArea(Long Id, CreateAreaForIntervention interventionArea);
 }

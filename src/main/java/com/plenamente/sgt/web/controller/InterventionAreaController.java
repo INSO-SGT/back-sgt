@@ -40,4 +40,10 @@ public class InterventionAreaController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<InterventionArea> updateInterventionArea(@PathVariable Long id, @RequestBody CreateAreaForIntervention createInterventionArea){
+        interventionAreaService.updateInterventionArea(id,createInterventionArea);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

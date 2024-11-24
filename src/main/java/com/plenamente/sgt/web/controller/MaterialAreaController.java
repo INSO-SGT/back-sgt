@@ -26,8 +26,8 @@ public class MaterialAreaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<MaterialArea> updateMaterialArea(@PathVariable Long id,@RequestParam Long interventionAreaId) {
-        MaterialArea updatedMaterialArea = materialAreaService.updateMaterialArea(id,interventionAreaId);
-        return ResponseEntity.ok(updatedMaterialArea);
+        materialAreaService.updateMaterialArea(id,interventionAreaId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/assign")

@@ -1,5 +1,6 @@
 package com.plenamente.sgt.service.impl;
 
+import com.plenamente.sgt.domain.dto.InterventionAreaDto.CreateAreaForIntervention;
 import com.plenamente.sgt.domain.dto.InterventionAreaDto.ListInterventionArea;
 import com.plenamente.sgt.domain.entity.InterventionArea;
 import com.plenamente.sgt.infra.repository.InterventionAreaRepository;
@@ -9,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,5 +48,14 @@ public class InterventionAreaServiceImpl implements InterventionAreaService {
                 .orElseThrow(()->new EntityNotFoundException("Intervention Area no encontrado con id: " + id));
         interventionAreaRepository.delete(ExisArea);
         return ExisArea;
+    }
+
+    @Override
+    public InterventionArea updateInterventionArea(Long Id,@RequestBody CreateAreaForIntervention interventionArea) {
+        InterventionArea existingInterventionArea = interventionAreaRepository.findById(Id)
+                .orElseThrow(() -> new EntityNotFoundException("Área de intervención no encontrada con id: " + Id));;
+        existingInterventionArea.setName(interventionArea.name());
+        existingInterventionArea.setDescription(interventionArea.description());
+        return interventionAreaRepository.save(existingInterventionArea);
     }
 }
