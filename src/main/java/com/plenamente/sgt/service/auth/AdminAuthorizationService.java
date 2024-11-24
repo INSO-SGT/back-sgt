@@ -14,4 +14,5 @@ public class AdminAuthorizationService implements AuthorizationService {
             throw new SecurityException("Acceso denegado: solo los administradores pueden registrar usuarios.");
         }
     }
+
 }
