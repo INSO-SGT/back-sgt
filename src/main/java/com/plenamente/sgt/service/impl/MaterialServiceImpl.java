@@ -3,6 +3,7 @@ package com.plenamente.sgt.service.impl;
 import com.plenamente.sgt.domain.dto.MaterialDto.RegisterMaterial;
 import com.plenamente.sgt.domain.entity.Material;
 import com.plenamente.sgt.domain.entity.Room;
+import com.plenamente.sgt.infra.repository.MaterialAreaRepository;
 import com.plenamente.sgt.infra.repository.MaterialRepository;
 import com.plenamente.sgt.infra.repository.RoomRepository;
 import com.plenamente.sgt.mapper.MaterialMapper;
@@ -10,6 +11,7 @@ import com.plenamente.sgt.service.MaterialService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,7 @@ public class MaterialServiceImpl implements MaterialService {
     private final MaterialRepository materialRepository;
     private final RoomRepository roomRepository;
     private final MaterialMapper materialMapper;
+    private final MaterialAreaRepository areaRepository;
 
     @Override
     public Material registerMaterial(RegisterMaterial dto) {
@@ -68,8 +71,9 @@ public class MaterialServiceImpl implements MaterialService {
 
         return materialRepository.save(existingMaterial);
     }
-
+    @Transactional
     public void deleteMaterial(String materialId){
+        areaRepository.deleteByMaterial_IdMaterial(materialId);
         materialRepository.deleteById(materialId);
     }
     public String generateNextMaterialId() {

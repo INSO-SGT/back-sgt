@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface MaterialAreaRepository extends JpaRepository<MaterialArea, Long> {
     List<MaterialArea> findByMaterial(Material material);
-
+    void deleteByMaterial_IdMaterial(String materialId);
 }
