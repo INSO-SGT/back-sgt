@@ -15,4 +15,5 @@ public interface SessionService {
     List<ListSession> getSessionsByDate(LocalDate date);
     List<ListSession> getSessionsByTherapist(Long therapistId);
     Session markPresence(MarkPresenceSession dto);
+    void assignSessionsFromSession(Long sessionId);
 }
