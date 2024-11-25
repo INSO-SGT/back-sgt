@@ -1,5 +1,7 @@
 package com.plenamente.sgt.service;
 
+import com.plenamente.sgt.domain.dto.MaterialArea.SearchInterventionArea;
+import com.plenamente.sgt.domain.dto.MaterialArea.SearchMaterialArea;
 import com.plenamente.sgt.domain.entity.Material;
 import com.plenamente.sgt.domain.entity.MaterialArea;
 
@@ -10,6 +12,6 @@ public interface MaterialAreaService {
     MaterialArea updateMaterialArea(Long id, Long interventionAreaId);
     MaterialArea assignMaterialToAreaMaterial(String materialId, Long AreaMaterialId);
     MaterialArea unassignMaterialFromAreaMaterial(Long AreaMaterialId);
-    List<MaterialArea> getMaterialsByAreaMaterial(String materialId);
-
+    List<SearchMaterialArea> getMaterialsByAreaMaterial(String materialId);
+    SearchInterventionArea getInterventionAreaByMaterialArea(Long materialAreaId);
 }

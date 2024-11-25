@@ -2,6 +2,7 @@ package com.plenamente.sgt.web.controller;
 
 import com.plenamente.sgt.domain.dto.InterventionAreaDto.CreateAreaForIntervention;
 import com.plenamente.sgt.domain.dto.InterventionAreaDto.ListInterventionArea;
+import com.plenamente.sgt.domain.dto.InterventionAreaDto.reportInterventionArea;
 import com.plenamente.sgt.domain.entity.InterventionArea;
 import com.plenamente.sgt.service.InterventionAreaService;
 import jakarta.validation.Valid;
@@ -46,4 +47,20 @@ public class InterventionAreaController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<reportInterventionArea> getInterventionArea(@PathVariable Long id) {
+        InterventionArea interventionArea = interventionAreaService.getInterventionArea(id);
+
+        // Crear el DTO utilizando el constructor vacío y setters
+        reportInterventionArea dto = new reportInterventionArea();
+        dto.setName(interventionArea.getName());
+        dto.setDescription(interventionArea.getDescription());
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+    @GetMapping("/find/{id}")
+    public ResponseEntity<List<ListInterventionArea>> getInterventionArea(@PathVariable("id") String materialId) {
+        List<ListInterventionArea> interventionArea = interventionAreaService.getInterventionAreaByMaterial(materialId);
+        return ResponseEntity.ok(interventionArea);
+    }
 }

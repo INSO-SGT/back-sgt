@@ -51,6 +51,9 @@ public class MaterialMapper {
                     source.getDescripcion(),
                     source.getStock(),
                     source.getEstado(),
+                    source.getFechaAlta(),
+                    source.isEsCompleto(),
+                    source.isEsSoporte(),
                     roomId
             );
         });

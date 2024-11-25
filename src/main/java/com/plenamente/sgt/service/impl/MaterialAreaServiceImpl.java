@@ -1,9 +1,10 @@
 package com.plenamente.sgt.service.impl;
 
+import com.plenamente.sgt.domain.dto.MaterialArea.SearchInterventionArea;
+import com.plenamente.sgt.domain.dto.MaterialArea.SearchMaterialArea;
 import com.plenamente.sgt.domain.entity.InterventionArea;
 import com.plenamente.sgt.domain.entity.Material;
 import com.plenamente.sgt.domain.entity.MaterialArea;
-import com.plenamente.sgt.domain.entity.Room;
 import com.plenamente.sgt.infra.exception.ResourceNotFoundException;
 import com.plenamente.sgt.infra.repository.InterventionAreaRepository;
 import com.plenamente.sgt.infra.repository.MaterialAreaRepository;
@@ -68,10 +69,18 @@ public class MaterialAreaServiceImpl implements MaterialAreaService {
     }
 
     @Override
-    public List<MaterialArea> getMaterialsByAreaMaterial(String materialId) {
+    public List<SearchMaterialArea> getMaterialsByAreaMaterial(String materialId) {
         Material material = materialRepository.findById(materialId)
                 .orElseThrow(() -> new EntityNotFoundException("Material no encontrado con id: " + materialId));
 
-        return materialAreaRepository.findByMaterial(material);
+        return materialAreaRepository.findByMaterial(material).stream()
+                .map(materialArea -> new SearchMaterialArea(materialArea.getIdMaterialArea()))
+                .toList();
+    }
+    @Override
+    public SearchInterventionArea getInterventionAreaByMaterialArea(Long materialAreaId) {
+        MaterialArea materialArea = materialAreaRepository.findById(materialAreaId)
+                .orElseThrow(() -> new EntityNotFoundException("MaterialArea no encontrado con id: " + materialAreaId));
+        return new SearchInterventionArea(materialArea.getInterventionArea().getIdInterventionArea());
     }
 }

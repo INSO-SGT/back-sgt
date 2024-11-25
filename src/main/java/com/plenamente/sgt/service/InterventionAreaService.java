@@ -14,4 +14,8 @@ public interface InterventionAreaService {
     InterventionArea deleteInterventionArea(Long id);
 
     InterventionArea updateInterventionArea(Long Id, CreateAreaForIntervention interventionArea);
+
+    InterventionArea getInterventionArea(Long id);
+
+    List<ListInterventionArea> getInterventionAreaByMaterial(String material);
 }
