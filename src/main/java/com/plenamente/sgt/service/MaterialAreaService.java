@@ -8,10 +8,11 @@ import com.plenamente.sgt.domain.entity.MaterialArea;
 import java.util.List;
 
 public interface MaterialAreaService {
-    MaterialArea createAreaForMaterial(String interventionAreaName);
+    MaterialArea createAreaForMaterial(String materialId, Long interventionAreaId);
     MaterialArea updateMaterialArea(Long id, Long interventionAreaId);
     MaterialArea assignMaterialToAreaMaterial(String materialId, Long AreaMaterialId);
     MaterialArea unassignMaterialFromAreaMaterial(Long AreaMaterialId);
     List<SearchMaterialArea> getMaterialsByAreaMaterial(String materialId);
     SearchInterventionArea getInterventionAreaByMaterialArea(Long materialAreaId);
+    void deleteMaterialArea(String materialId, Long interventionAreaId);
 }

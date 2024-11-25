@@ -25,13 +25,27 @@ public class MaterialAreaServiceImpl implements MaterialAreaService {
     private final MaterialRepository materialRepository;
 
     @Override
-    public MaterialArea createAreaForMaterial(String interventionAreaName) {
-        InterventionArea interventionArea = interventionAreaRepository.findByName(interventionAreaName)
-                .orElseThrow(() -> new ResourceNotFoundException("Área de intervención no encontrada con nombre: " + interventionAreaName));
+    public MaterialArea createAreaForMaterial(String materialId, Long interventionAreaId) {
+        // Buscar el Material por su ID
+        Material material = materialRepository.findById(materialId)
+                .orElseThrow(() -> new ResourceNotFoundException("Material no encontrado con ID: " + materialId));
 
+        // Buscar el InterventionArea por su ID
+        InterventionArea interventionArea = interventionAreaRepository.findById(interventionAreaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Área de intervención no encontrada con ID: " + interventionAreaId));
+
+        // Verificar si ya existe una relación entre el Material y el InterventionArea
+        MaterialArea existingMaterialArea = materialAreaRepository.findByMaterialAndInterventionArea(material, interventionArea);
+        if (existingMaterialArea != null) {
+            throw new IllegalStateException("El material ya está asignado a esta área de intervención.");
+        }
+
+        // Crear el objeto MaterialArea
         MaterialArea materialArea = new MaterialArea();
-        materialArea.setInterventionArea(interventionArea);
+        materialArea.setMaterial(material);  // Asignar el material
+        materialArea.setInterventionArea(interventionArea);  // Asignar el área de intervención
 
+        // Guardar el MaterialArea
         return materialAreaRepository.save(materialArea);
     }
 
@@ -82,5 +96,16 @@ public class MaterialAreaServiceImpl implements MaterialAreaService {
         MaterialArea materialArea = materialAreaRepository.findById(materialAreaId)
                 .orElseThrow(() -> new EntityNotFoundException("MaterialArea no encontrado con id: " + materialAreaId));
         return new SearchInterventionArea(materialArea.getInterventionArea().getIdInterventionArea());
+    }
+
+
+    @Override
+    public void deleteMaterialArea(String  materialId, Long interventionAreaId) {
+        // Buscar el MaterialArea por materialId e interventionAreaId
+        MaterialArea materialArea = materialAreaRepository.findByMaterial_IdMaterialAndInterventionArea_IdInterventionArea(materialId, interventionAreaId)
+                .orElseThrow(() -> new EntityNotFoundException("MaterialArea no encontrado con materialId: " + materialId + " y interventionAreaId: " + interventionAreaId));
+
+        // Eliminar el MaterialArea de la base de datos
+        materialAreaRepository.delete(materialArea);
     }
 }
