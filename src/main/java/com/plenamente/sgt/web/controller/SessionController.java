@@ -4,13 +4,17 @@ import com.plenamente.sgt.domain.dto.SessionDto.ListSession;
 import com.plenamente.sgt.domain.dto.SessionDto.MarkPresenceSession;
 import com.plenamente.sgt.domain.dto.SessionDto.RegisterSession;
 import com.plenamente.sgt.domain.dto.SessionDto.UpdateSession;
+import com.plenamente.sgt.domain.dto.UserDto.ListTherapist;
 import com.plenamente.sgt.domain.entity.Session;
+import com.plenamente.sgt.domain.entity.User;
 import com.plenamente.sgt.service.SessionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -55,5 +59,15 @@ public class SessionController {
         dto = new MarkPresenceSession(sessionId, dto.therapistPresent(), dto.patientPresent());
         Session updatedSession = sessionService.markPresence(dto);
         return ResponseEntity.ok(updatedSession);
+    }
+
+    @GetMapping("/available-therapists")
+    public ResponseEntity<List<ListTherapist>> getAvailableTherapists(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate sessionDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime) {
+
+        List<ListTherapist> availableTherapists = sessionService.getAvailableTherapist(sessionDate, startTime, endTime);
+        return ResponseEntity.ok(availableTherapists);
     }
 }

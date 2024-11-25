@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,4 +14,6 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
     List<Session> findBySessionDate(LocalDate date);
     List<Session> findByTherapist_IdUser(Long therapistId);
     Optional<Session> findByIdSession(Long idSession);
+    boolean existsByTherapist_IdUserAndSessionDateAndStartTimeLessThanEqualAndEndTimeGreaterThanEqual(Long therapistId, LocalDate sessionDate, LocalTime endTime, LocalTime startTime);
+
 }

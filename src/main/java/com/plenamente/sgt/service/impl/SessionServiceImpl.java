@@ -4,6 +4,8 @@ import com.plenamente.sgt.domain.dto.SessionDto.ListSession;
 import com.plenamente.sgt.domain.dto.SessionDto.MarkPresenceSession;
 import com.plenamente.sgt.domain.dto.SessionDto.RegisterSession;
 import com.plenamente.sgt.domain.dto.SessionDto.UpdateSession;
+import com.plenamente.sgt.domain.dto.UserDto.ListTherapist;
+import com.plenamente.sgt.domain.dto.UserDto.ListUser;
 import com.plenamente.sgt.domain.entity.*;
 import com.plenamente.sgt.infra.exception.ResourceNotFoundException;
 import com.plenamente.sgt.infra.repository.*;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -128,6 +131,24 @@ public class SessionServiceImpl implements SessionService {
 
         // Guardar la sesión actualizada
         return sessionRepository.save(session);
+    }
+
+    @Override
+    public List<ListTherapist> getAvailableTherapist(LocalDate date, LocalTime startTime, LocalTime endTime) {
+        List<User> therapists = userRepository.findByRol(Rol.THERAPIST);
+
+        // Filtrar los terapeutas disponibles, y mapearlos a la clase ListTherapist
+        return therapists.stream()
+                .filter(therapist -> isTherapistAvailable(therapist.getIdUser(), date, startTime, endTime))
+                .map(therapist -> new ListTherapist(
+                        therapist.getIdUser(),
+                        therapist.getName()
+                )).collect(Collectors.toList());
+    }
+
+    public boolean isTherapistAvailable(Long therapistId, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        return !sessionRepository.existsByTherapist_IdUserAndSessionDateAndStartTimeLessThanEqualAndEndTimeGreaterThanEqual(
+                therapistId, date, endTime, startTime);
     }
 
 }
