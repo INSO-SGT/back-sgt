@@ -51,7 +51,6 @@ public class SessionServiceImpl implements SessionService {
         session.setTherapist(therapist);
         session.setRoom(room);
         session.setPlan(plan);
-
         return sessionRepository.save(session);
     }
 
@@ -136,11 +135,9 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public void assignSessionsFromSession(Long sessionId) {
-        // Buscar la sesión inicial por su ID
         Session initialSession = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new IllegalArgumentException("Sesión inicial no encontrada"));
 
-        // Obtener la fecha inicial, el paciente y el plan asociados a la sesión
         LocalDate startDate = initialSession.getSessionDate();
         Patient patient = initialSession.getPatient();
         Plan plan = initialSession.getPlan();
@@ -151,11 +148,9 @@ public class SessionServiceImpl implements SessionService {
 
         int sessionsPerWeek = plan.getNumOfSessions();
 
-        // Calcular fechas para las nuevas sesiones
         List<LocalDate> sessionDates = calculateSessionDates(startDate, sessionsPerWeek);
 
         for (LocalDate sessionDate : sessionDates) {
-            // Evitar duplicar la sesión inicial
             if (sessionDate.isEqual(startDate)) {
                 continue;
             }
@@ -165,7 +160,7 @@ public class SessionServiceImpl implements SessionService {
             newSession.setPatient(patient);
             newSession.setPlan(plan);
             newSession.setTherapist(initialSession.getTherapist());
-            newSession.setRoom(initialSession.getRoom()); // Usa la misma sala que la sesión inicial
+            newSession.setRoom(initialSession.getRoom());
             newSession.setTherapistPresent(false);
             newSession.setPatientPresent(false);
             newSession.setEndTime(initialSession.getEndTime());
@@ -177,9 +172,9 @@ public class SessionServiceImpl implements SessionService {
 
     private List<LocalDate> calculateSessionDates(LocalDate startDate, int sessionsPerWeek) {
         List<LocalDate> dates = new ArrayList<>();
-        int daysBetween = 7 / sessionsPerWeek; // Intervalo de días entre sesiones en la semana
+        int daysBetween = 7 / sessionsPerWeek;
 
-        for (int i = 0; i < 4; i++) { // 4 semanas (un mes)
+        for (int i = 0; i < 4; i++) {
             for (int j = 0; j < sessionsPerWeek; j++) {
                 dates.add(startDate.plusDays(i * 7 + j * daysBetween));
             }

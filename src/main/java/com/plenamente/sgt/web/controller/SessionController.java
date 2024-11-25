@@ -25,7 +25,9 @@ public class SessionController {
 
     @PostMapping("/register" )
     public ResponseEntity<Session> registerSession(@RequestBody RegisterSession dto) {
-        return ResponseEntity.ok(sessionService.createSession(dto));
+        Session session = sessionService.createSession(dto);
+        sessionService.assignSessionsFromSession(session.getIdSession());
+        return ResponseEntity.ok(session);
     }
 
     @GetMapping("/therapist/{id}")
