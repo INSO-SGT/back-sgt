@@ -142,15 +142,15 @@ public class SessionServiceImpl implements SessionService {
         Patient patient = initialSession.getPatient();
         Plan plan = initialSession.getPlan();
 
-        if (plan == null || plan.getNumOfSessions() == null) {
+        if (plan == null) {
             throw new IllegalArgumentException("El paciente no tiene un plan válido asociado a la sesión");
         }
 
-        int sessionsPerWeek = plan.getNumOfSessions();
-
-        List<LocalDate> sessionDates = calculateSessionDates(startDate, sessionsPerWeek);
+        // Crea 1 sesión por semana durante 4 semanas (un mes)
+        List<LocalDate> sessionDates = calculateWeeklySessionDates(startDate);
 
         for (LocalDate sessionDate : sessionDates) {
+            // Evitar duplicar la sesión inicial
             if (sessionDate.isEqual(startDate)) {
                 continue;
             }
@@ -170,18 +170,17 @@ public class SessionServiceImpl implements SessionService {
         }
     }
 
-    private List<LocalDate> calculateSessionDates(LocalDate startDate, int sessionsPerWeek) {
+    private List<LocalDate> calculateWeeklySessionDates(LocalDate startDate) {
         List<LocalDate> dates = new ArrayList<>();
-        int daysBetween = 7 / sessionsPerWeek;
 
+        // Generar fechas: una por semana durante 4 semanas
         for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < sessionsPerWeek; j++) {
-                dates.add(startDate.plusDays(i * 7 + j * daysBetween));
-            }
+            dates.add(startDate.plusWeeks(i));
         }
 
         return dates;
     }
+
 
     @Override
     public List<ListTherapist> getAvailableTherapist(LocalDate date, LocalTime startTime, LocalTime endTime) {
