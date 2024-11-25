@@ -61,6 +61,18 @@ public class SessionController {
         return ResponseEntity.ok(updatedSession);
     }
 
+    @PostMapping("/assign-from-session/{sessionId}")
+    public ResponseEntity<String> assignSessionsFromSession(@PathVariable Long sessionId) {
+        try {
+            sessionService.assignSessionsFromSession(sessionId);
+            return ResponseEntity.ok("Sesiones asignadas correctamente a partir de la sesión con ID " + sessionId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Error al asignar sesiones: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error interno del servidor: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/available-therapists")
     public ResponseEntity<List<ListTherapist>> getAvailableTherapists(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate sessionDate,

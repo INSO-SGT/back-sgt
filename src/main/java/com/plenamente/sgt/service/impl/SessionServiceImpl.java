@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -131,6 +132,60 @@ public class SessionServiceImpl implements SessionService {
 
         // Guardar la sesión actualizada
         return sessionRepository.save(session);
+    }
+
+    @Override
+    public void assignSessionsFromSession(Long sessionId) {
+        // Buscar la sesión inicial por su ID
+        Session initialSession = sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new IllegalArgumentException("Sesión inicial no encontrada"));
+
+        // Obtener la fecha inicial, el paciente y el plan asociados a la sesión
+        LocalDate startDate = initialSession.getSessionDate();
+        Patient patient = initialSession.getPatient();
+        Plan plan = initialSession.getPlan();
+
+        if (plan == null || plan.getNumOfSessions() == null) {
+            throw new IllegalArgumentException("El paciente no tiene un plan válido asociado a la sesión");
+        }
+
+        int sessionsPerWeek = plan.getNumOfSessions();
+
+        // Calcular fechas para las nuevas sesiones
+        List<LocalDate> sessionDates = calculateSessionDates(startDate, sessionsPerWeek);
+
+        for (LocalDate sessionDate : sessionDates) {
+            // Evitar duplicar la sesión inicial
+            if (sessionDate.isEqual(startDate)) {
+                continue;
+            }
+
+            Session newSession = new Session();
+            newSession.setSessionDate(sessionDate);
+            newSession.setPatient(patient);
+            newSession.setPlan(plan);
+            newSession.setTherapist(initialSession.getTherapist());
+            newSession.setRoom(initialSession.getRoom()); // Usa la misma sala que la sesión inicial
+            newSession.setTherapistPresent(false);
+            newSession.setPatientPresent(false);
+            newSession.setEndTime(initialSession.getEndTime());
+            newSession.setStartTime(initialSession.getStartTime());
+
+            sessionRepository.save(newSession);
+        }
+    }
+
+    private List<LocalDate> calculateSessionDates(LocalDate startDate, int sessionsPerWeek) {
+        List<LocalDate> dates = new ArrayList<>();
+        int daysBetween = 7 / sessionsPerWeek; // Intervalo de días entre sesiones en la semana
+
+        for (int i = 0; i < 4; i++) { // 4 semanas (un mes)
+            for (int j = 0; j < sessionsPerWeek; j++) {
+                dates.add(startDate.plusDays(i * 7 + j * daysBetween));
+            }
+        }
+
+        return dates;
     }
 
     @Override
