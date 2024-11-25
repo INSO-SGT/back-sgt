@@ -105,8 +105,6 @@ public class PatientServiceImpl implements PatientService {
         existingPatient.setBirthdate(updatePatient.birthdate());
         existingPatient.setAge(updatePatient.age());
         existingPatient.setAllergies(updatePatient.allergies());
-        existingPatient.setIdPlan(updatePatient.idPlan());
-        existingPatient.setTutors(updatePatient.tutors());
 
         return patientRepository.save(existingPatient);
     }

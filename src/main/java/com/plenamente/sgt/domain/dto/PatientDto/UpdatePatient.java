@@ -16,9 +16,5 @@ public record UpdatePatient(
         @Length(max = 30) String maternalSurname,
         @Past LocalDate birthdate,
         @Min(0) @Max(18) int age,
-        @Length(max = 255) String allergies,
-        boolean status,
-        @NotNull Plan idPlan,
-        @NotEmpty @Size(min = 1, max = 2) List<Tutor> tutors,
-        MultipartFile photo  // Para lo de la foto
+        @Length(max = 255) String allergies
 ) {}
