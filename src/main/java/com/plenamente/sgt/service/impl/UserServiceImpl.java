@@ -1,6 +1,7 @@
 package com.plenamente.sgt.service.impl;
 
 import com.plenamente.sgt.domain.dto.UserDto.ListUser;
+import com.plenamente.sgt.domain.dto.UserDto.MyProfile;
 import com.plenamente.sgt.domain.dto.UserDto.RegisterUser;
 import com.plenamente.sgt.domain.entity.AdminTherapist;
 import com.plenamente.sgt.domain.entity.Secretary;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public TokenResponse login(LoginRequest request) {
+        // Limpia el contexto de seguridad antes de autenticar
+        SecurityContextHolder.clearContext();
+
+        // Autentica al usuario
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
@@ -41,15 +47,21 @@ public class UserServiceImpl implements UserService {
                 )
         );
 
+        // Establece el usuario autenticado en el contexto de seguridad
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Recupera el usuario desde el repositorio utilizando el username del request
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con username: " + request.getUsername()));
 
+        // Verifica si el usuario está habilitado
         if (!user.isEnabled()) {
             throw new DisabledException("Este usuario ha sido deshabilitado.");
         }
 
-        String token = jwtService.getToken(user, user);
+        // Genera el token para el usuario autenticado
+        String token = jwtService.getToken((UserDetails) authentication.getPrincipal(), user);
+
         return TokenResponse.builder()
                 .token(token)
                 .build();
@@ -78,16 +90,6 @@ public class UserServiceImpl implements UserService {
             Double paymentSession = data.paymentSession();
             if (paymentSession != null) {
                 ((Therapist) user).setPaymentSession(paymentSession);
-            }
-        } else if (user instanceof Secretary) {
-            Double paymentMonthly = data.paymentMonthly();
-            if (paymentMonthly != null) {
-                ((Secretary) user).setPaymentMonthly(paymentMonthly);
-            }
-        } else if (user instanceof AdminTherapist) {
-            Double paymentSession = data.paymentSession();
-            if (paymentSession != null) {
-                ((AdminTherapist) user).setPaymentSession(paymentSession);
             }
         }
 
@@ -137,6 +139,50 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @Override
+    public MyProfile getMyProfile(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con username: " + username));
+        return new MyProfile(
+                user.getName(),
+                user.getPaternalSurname(),
+                user.getMaternalSurname(),
+                user.getDni(),
+                user.getAddress(),
+                user.getPhone(),
+                user.getPhoneBackup(),
+                user.getEmail(),
+                user.getRol()
+        );
+    }
 
+    @Override
+    public MyProfile updateMyProfile(String username, MyProfile myProfileDto) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con username: " + username));
 
+        // Actualizar datos del usuario
+        user.setName(myProfileDto.name());
+        user.setPaternalSurname(myProfileDto.paternalSurname());
+        user.setMaternalSurname(myProfileDto.maternalSurname());
+        user.setDni(myProfileDto.dni());
+        user.setAddress(myProfileDto.address());
+        user.setPhone(myProfileDto.phone());
+        user.setPhoneBackup(myProfileDto.phoneBackup());
+        user.setEmail(myProfileDto.email());
+
+        userRepository.save(user); // Guardar cambios
+
+        return new MyProfile(
+                user.getName(),
+                user.getPaternalSurname(),
+                user.getMaternalSurname(),
+                user.getDni(),
+                user.getAddress(),
+                user.getPhone(),
+                user.getPhoneBackup(),
+                user.getEmail(),
+                user.getRol()
+        );
+    }
 }
