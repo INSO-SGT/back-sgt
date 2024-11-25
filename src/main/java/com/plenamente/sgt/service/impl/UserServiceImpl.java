@@ -147,6 +147,7 @@ public class UserServiceImpl implements UserService {
                 user.getName(),
                 user.getPaternalSurname(),
                 user.getMaternalSurname(),
+                user.getDni(),
                 user.getAddress(),
                 user.getPhone(),
                 user.getPhoneBackup(),
@@ -164,6 +165,7 @@ public class UserServiceImpl implements UserService {
         user.setName(myProfileDto.name());
         user.setPaternalSurname(myProfileDto.paternalSurname());
         user.setMaternalSurname(myProfileDto.maternalSurname());
+        user.setDni(myProfileDto.dni());
         user.setAddress(myProfileDto.address());
         user.setPhone(myProfileDto.phone());
         user.setPhoneBackup(myProfileDto.phoneBackup());
@@ -175,6 +177,7 @@ public class UserServiceImpl implements UserService {
                 user.getName(),
                 user.getPaternalSurname(),
                 user.getMaternalSurname(),
+                user.getDni(),
                 user.getAddress(),
                 user.getPhone(),
                 user.getPhoneBackup(),
