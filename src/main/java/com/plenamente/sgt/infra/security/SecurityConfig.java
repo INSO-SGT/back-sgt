@@ -30,7 +30,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration configuration = new CorsConfiguration();
-            configuration.setAllowedOrigins(List.of("*")); // Define los orígenes permitidos
+            configuration.setAllowedOrigins(List.of("http://localhost:4200")); // Define los orígenes permitidos
             configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
             configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
             configuration.setAllowCredentials(true); // Permite credenciales si es necesario
@@ -41,6 +41,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/users/login", "/api/v1/users/register").permitAll() // Rutas públicas
+                        .requestMatchers("/api/v1/users/me").authenticated()
                         .requestMatchers("/swagger-ui.html", "/v3/api-docs/*", "/swagger-ui/*").permitAll() // Swagger
                         .anyRequest().authenticated() // Protege todas las demás rutas
                 )
