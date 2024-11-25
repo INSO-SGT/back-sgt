@@ -1,5 +1,6 @@
 package com.plenamente.sgt.service.impl;
 
+import com.plenamente.sgt.domain.dto.MaterialDto.ListMaterial;
 import com.plenamente.sgt.domain.dto.MaterialDto.RegisterMaterial;
 import com.plenamente.sgt.domain.entity.Material;
 import com.plenamente.sgt.domain.entity.Room;
@@ -52,9 +53,9 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public Material getMaterialById(String id) {
-        return materialRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Material no encontrado con id: " + id));
+    public ListMaterial getMaterialById(String id) {
+        Material material = materialRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return materialMapper.ListDTO(material);
     }
 
     @Override

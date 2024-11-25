@@ -1,5 +1,6 @@
 package com.plenamente.sgt.web.controller;
 
+import com.plenamente.sgt.domain.dto.MaterialDto.ListMaterial;
 import com.plenamente.sgt.domain.dto.MaterialDto.RegisterMaterial;
 import com.plenamente.sgt.domain.entity.Material;
 import com.plenamente.sgt.service.MaterialService;
@@ -31,8 +32,8 @@ public class MaterialController {
     }
 
     @GetMapping("/select/{id}")
-    public ResponseEntity<Material> getMaterialById(@PathVariable String id) {
-        Material material = materialService.getMaterialById(id);
+    public ResponseEntity<ListMaterial> getMaterialById(@PathVariable String id) {
+        ListMaterial material = materialService.getMaterialById(id);
         return new ResponseEntity<>(material, HttpStatus.OK);
     }
 

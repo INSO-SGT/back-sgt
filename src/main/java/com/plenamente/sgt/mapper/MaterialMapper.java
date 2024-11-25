@@ -1,5 +1,6 @@
 package com.plenamente.sgt.mapper;
 
+import com.plenamente.sgt.domain.dto.MaterialDto.ListMaterial;
 import com.plenamente.sgt.domain.dto.MaterialDto.RegisterMaterial;
 import com.plenamente.sgt.domain.entity.Material;
 import org.modelmapper.ModelMapper;
@@ -36,5 +37,23 @@ public class MaterialMapper {
 
     public Material toEntity(RegisterMaterial registerMaterial) {
         return modelMapper.map(registerMaterial, Material.class);
+    }
+    public ListMaterial ListDTO(Material material){
+        ModelMapper modelMapper = new ModelMapper();
+
+        TypeMap<Material, ListMaterial> propertyMapper = modelMapper.createTypeMap(Material.class, ListMaterial.class);
+        propertyMapper.setConverter(context -> {
+            Material source = context.getSource();
+            Long roomId = (source.getRoom() != null) ? source.getRoom().getIdRoom() : null;
+            return new ListMaterial(
+                    source.getIdMaterial(),
+                    source.getNombre(),
+                    source.getDescripcion(),
+                    source.getStock(),
+                    source.getEstado(),
+                    roomId
+            );
+        });
+        return modelMapper.map(material, ListMaterial.class);
     }
 }
