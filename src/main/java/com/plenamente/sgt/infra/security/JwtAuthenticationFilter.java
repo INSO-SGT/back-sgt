@@ -54,4 +54,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        // Excluye rutas públicas como login y register
+        return path.equals("/api/v1/users/login") || path.equals("/api/v1/users/register");
+    }
+
 }
